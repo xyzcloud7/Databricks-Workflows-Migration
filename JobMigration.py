@@ -139,10 +139,11 @@ def resetJob(host, token, jobId, jsonString):
 
 
 
-
+#get the existing job list from source workspace
 jobList = getJobList(sourceWorkspaceHost, sourceWorkspaceToken)
 if jobList:
     print(f"Total available job list is {jobList}")
+    #filter out the eligibles from source workspace
     eligibleJobList = filterEligibleJobs(sourceWorkspaceHost, sourceWorkspaceToken, jobList)
     if len(eligibleJobList) == 0:
         print(f"No Jobs are available for promoting to next workspace")
