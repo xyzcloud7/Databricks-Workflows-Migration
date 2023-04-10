@@ -17,8 +17,10 @@ import requests
 def createJob(jsonString):
     try:
         data = json.dumps(jsonString)
-        res = requests.post(f"https://{spark.conf.get('spark.databricks.workspaceUrl')}/api/2.1/jobs/create"
-                        , data = data, headers = {"Authorization" : "Bearer " +  sc.getLocalProperty("spark.databricks.token") 
+        url = dbutils.notebook.entry_point.getDbutils().notebook().getContext().browserHostName().get()
+        token = dbutils.secrets.get(scope="token", key=url)
+        res = requests.post(f"https://{url}/api/2.1/jobs/create"
+                        , data = data, headers = {"Authorization" : "Bearer " +  token 
                                                   , "Content-Type" : "application/json"})
         if res.status_code == 200:
             jobId = json.loads(res.text)['job_id']
